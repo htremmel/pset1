@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+    <classpathentry kind="src" path="./src/main"/>
+    <classpathentry kind="src" path="./src/test"/>
+	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="lib" path="../_res/junit-4.10.jar"/>
+	<classpathentry kind="lib" path="../_res/algs4.jar"/>
+</classpath>

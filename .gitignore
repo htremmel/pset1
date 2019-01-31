@@ -1,0 +1,6 @@
+./**/*.swp
+./**/*.swo
+bin/
+src/tst/wordnet/
+.metadata
+.settings
