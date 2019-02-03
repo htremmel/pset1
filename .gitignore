@@ -1,6 +1,7 @@
 ./**/*.swp
 ./**/*.swo
 bin/
-src/test/wordnet/
 .metadata
+data/
 .settings
+bin/
