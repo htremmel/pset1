@@ -3,7 +3,6 @@ import edu.princeton.cs.algs4.ST;
 import edu.princeton.cs.algs4.Digraph;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.MinPQ;
-import edu.
 
 /* Name: Shortest Ancesteral Path.
  * Desc: An ancestral path between two vertices v and w in a digraph is a directed path from v to a common ancestor x, together with a directed path from w to the same ancestor x. A shortest ancestral path is an ancestral path of minimum total length. For example, in the digraph at left (digraph1.txt), the shortest ancestral path between 3 and 11 has length 4 (with common ancestor 1). In the digraph at right (digraph2.txt), one ancestral path between 1 and 5 has length 4 (with common ancestor 5), but the shortest ancestral path has length 2 (with common ancestor 0).
@@ -17,8 +16,7 @@ public class SAP {
     public SAP(Digraph G) {
         if (G == null) throw new IllegalArgumentException("Shall provide a valid graph object in constructor.");
         finder = new WordTree(G);
-        _graph = new WordTree(G); // Not the best way to handle this.
-
+        _graph = G; // Not the best way to handle this.
     }
 
     // length of shortest ancestral path between v and w; -1 if no such path
@@ -73,6 +71,11 @@ public class SAP {
               if (marked[i] && other.marked[i]) return true;
             }
             return false;
+        }
+
+        // Traverses the graph and finally comes to the root.  This is part of the brute force attempt.
+        void go() {
+
         }
     }
 
@@ -204,7 +207,6 @@ public class SAP {
 
 
         }
-
         // Provides the lowest common ancestor from the collection of ST.
         public int length() {
 
