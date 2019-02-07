@@ -4,7 +4,6 @@ import edu.princeton.cs.algs4.Digraph;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.MinPQ;
 
-
 /* Name: Shortest Ancesteral Path.
  * Crea: 02/04/2018
  */
@@ -106,12 +105,14 @@ public class SAP {
     // I want this pulse and find using DFS and BFS like slime mold.
     class WordTree implements IFinder {
         ST<Integer,field> fields; // Stores the fields so I'm not doing the same search again.
-        Digraph tree;
+        Digraph reversed;
         MinPQ<LCA> lca; 
+        boolean[] marked;
         public WordTree() {
             fields = new ST<Integer,field>();
             lca = new MinPQ<LCA>();
-            tree = new Digraph(_graph.V());
+            reversed = _graph.reverse();
+            marked = new boolean[_graph.V()];
         }
 
         // Finds the ancestor with the shortest path. Generators an ancestor class.
@@ -119,11 +120,7 @@ public class SAP {
         }
 
         public void add(int v) {
-            field f = new field(v);
-            fields.put(v, f);  // If already exists skip.
-            for (int i = 0; i < f.edgeTo.length; i++ ) {
-                tree.addEdge(i, f.edgeTo[i]);
-            }
+
         }
 
         // Checks the tree object to see if it exists on the tree.
