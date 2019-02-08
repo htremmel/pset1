@@ -56,27 +56,58 @@ public class SAP {
     public static void main(String[] args) {
     }
 
-    class field {
-        int so;
-        public boolean[] marked;
-        public int[] edgeTo;
-        public field(int v){
-            so = v;
+    class searcher {
+
+        int _v;
+        boolean[] marked;
+        Integer[] edgeTo;
+        Digraph _g;
+        int root;
+
+        public searcher (int v, int rt, Digraph g) { // could be a reversed diagraph or whatever orientation.
+            _g = g;
+            root = rt;
+            marked = new boolean[_g.V()];
+            edgeTo = new Integer[_g.V()]; // Could these be unecessarily massive.  Perhaps room for a linked list?
+            _v = v;
         };
 
         // Traverses the graph and finally comes to the root.  This is part of the brute force attempt.
         void generate() {
             Queue<Integer> queue = new Queue<Integer>();
-            queue.enqueue(so);
+            queue.enqueue(root);
             while (!queue.isEmpty()) {
                 int v = queue.dequeue();
-                for (int x: _graph.adj(v))
+                for (int x: _g.adj(v)) {
                     if (!marked[x]) {
                         edgeTo[x] = v;
                         marked[x] = true;
                         queue.enqueue(x);
                     }
+                    if (x == _v) break; // If the searching is found stop generating edgeTo.
+                }
             }
+        }
+
+        Integer lengthTo() {
+            int len = 0;
+            int t = _v;
+            while (t == root) {
+                len++;
+                t = this.edgeTo[t];
+            }
+            return len;
+        }
+
+        Integer lengthTo(int root) {
+            int len = 0;
+            int t = _v;
+            if (this.edgeTo[root] == null) return null; // if the root provided was found, then not valid.  Exit.
+            while (t == root) {
+                len++;
+                t = this.edgeTo[t];
+            }
+            return len;
         }
     }
 
@@ -105,15 +136,11 @@ public class SAP {
 
     // I want this pulse and find using DFS and BFS like slime mold.
     class WordTree implements IFinder {
-        Bag<Integer> vs; // Stores the fields so I'm not doing the same search again.
-        Digraph reversed;
-        MinPQ<LCA> lca; 
+        MinPQ<LCA> common; 
         int iamroot;
-        boolean[] marked;
         public WordTree() {
-            vs = new Bag<Integer>();
-            lca = new MinPQ<LCA>();
-            iamroot = GetRoot();
+            common = new MinPQ<LCA>();
+            iamroot = getRoot();
         }
 
         // Finds the ancestor with the shortest path. Generators an ancestor class.
@@ -121,7 +148,7 @@ public class SAP {
 
         }
 
-        public int GetRoot() {
+        public int getRoot() {
             for (int i = 0; i < _graph.V(); i++)
                 if(_graph.outdegree(i) == 0)
                     return i;
@@ -129,35 +156,33 @@ public class SAP {
             throw new IllegalArgumentException("Not an acyclic graph.");
         }
 
-        public void add(int v) {
-            vs.add(v);
-            field f = new field(v);
-        }
-
         // Checks the tree object to see if it exists on the tree.
         boolean isfound(int v) {
             return tree.reverse().indegree(v) != 0;
-        }
-
-        Iterable<Integer> GetCommon (field f) {
-            Bag<Integer> bag = new Bag<Integer>();
-            for (int i = 0; i < _graph.V(); i++)
-                if (f.marked[i] == marked[i]) {
-                    
-                } 
-            k
-
-            return bag;
         }
 
         public int length(int v, int w) {
             return getLCA(new field(v), new field(w)).length;
         }
 
-        public LCA getLCA(field f1, field f2) {
-            MinPQ<LCA> lca = new MinPQ<LCA>();
-            for (int i = 0; i < _graph.V(); i++) {
+        public LCA getLCA(int v, int w) {
+            Digraph reversed = _graph.reverse();
+            searcher sv = new searcher(v,iamroot,reversed); // BFS from root to target.  We're pretty sure this exists if its acyclic.
+            searcher sw = new searcher(w,iamroot,reversed);
+            MinPQ<LCA> shortest = new MinPQ<LCA>();
+
+            // Refactor to LCA type?
+            for (int i = 0; i < reversed.V(); i++) { // Walk from root to v and w and store a LCA that's reachable by both.
+                if(sv.marked[i] && sw.marked[i]) {
+                    LCA lca = new LCA();
+                    lca.length = sv.lengthTo(i) + sw.lengthTo(i);
+                    lca.v = v;
+                    lca.w = w;
+                    lca.ancestor = i;
+                    shortest.insert(lca);
+                }
             }
+            return shortest.min();
         }
 
         // Provides the lowest common ancestor from the collection of ST.
