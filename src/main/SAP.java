@@ -1,8 +1,10 @@
 import java.lang.IllegalArgumentException;
+import java.lang.Comparable;
 import edu.princeton.cs.algs4.ST;
 import edu.princeton.cs.algs4.Digraph;
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.MinPQ;
+import edu.princeton.cs.algs4.Bag;
 
 /* Name: Shortest Ancesteral Path.
  * Crea: 02/04/2018
@@ -60,7 +62,6 @@ public class SAP {
         public int[] edgeTo;
         public field(int v){
             so = v;
-            generate();
         };
 
         // Traverses the graph and finally comes to the root.  This is part of the brute force attempt.
@@ -104,29 +105,49 @@ public class SAP {
 
     // I want this pulse and find using DFS and BFS like slime mold.
     class WordTree implements IFinder {
-        ST<Integer,field> fields; // Stores the fields so I'm not doing the same search again.
+        Bag<Integer> vs; // Stores the fields so I'm not doing the same search again.
         Digraph reversed;
         MinPQ<LCA> lca; 
+        int iamroot;
         boolean[] marked;
         public WordTree() {
-            fields = new ST<Integer,field>();
+            vs = new Bag<Integer>();
             lca = new MinPQ<LCA>();
-            reversed = _graph.reverse();
-            marked = new boolean[_graph.V()];
+            iamroot = GetRoot();
         }
 
         // Finds the ancestor with the shortest path. Generators an ancestor class.
         public int ancestor(int v, int w) {
+
+        }
+
+        public int GetRoot() {
+            for (int i = 0; i < _graph.V(); i++)
+                if(_graph.outdegree(i) == 0)
+                    return i;
+
+            throw new IllegalArgumentException("Not an acyclic graph.");
         }
 
         public void add(int v) {
-
+            vs.add(v);
+            field f = new field(v);
         }
 
         // Checks the tree object to see if it exists on the tree.
         boolean isfound(int v) {
             return tree.reverse().indegree(v) != 0;
+        }
 
+        Iterable<Integer> GetCommon (field f) {
+            Bag<Integer> bag = new Bag<Integer>();
+            for (int i = 0; i < _graph.V(); i++)
+                if (f.marked[i] == marked[i]) {
+                    
+                } 
+            k
+
+            return bag;
         }
 
         public int length(int v, int w) {
