@@ -9,12 +9,13 @@ public class SAP {
 
     IFinder finder;
     Digraph _graph;
-    Digraph reversed = _graph.reverse();
+    Digraph reversed;
     // Takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
         if (G == null) throw new IllegalArgumentException("Shall provide a valid graph object in constructor.");
         finder = new WordTree();
         _graph = G; // Not the best way to handle this.
+        reversed = G.reverse();
     }
 
     // length of shortest ancestral path between v and w; -1 if no such path
@@ -51,7 +52,7 @@ public class SAP {
         public searcher (int v, int rt) { // could be a reversed diagraph or whatever orientation.
             root = rt;
             marked = new boolean[reversed.V()];
-            edgeTo = new Integer[reversed.V()]; // Could these be unecessarily massive.  Perhaps room for a linked list?
+            edgeTo = new Integer[reversed.V()]; // Could these be unecessarily massive.  Perhaps room for a linked list?  I need this for null detection.
             _v = v;
         };
 
