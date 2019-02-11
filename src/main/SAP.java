@@ -8,14 +8,15 @@ import edu.princeton.cs.algs4.MinPQ;
 public class SAP {
 
     IFinder finder;
-    Digraph _graph;
-    Digraph reversed;
+    static Digraph _graph;
+    static Digraph reversed;
     // Takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
         if (G == null) throw new IllegalArgumentException("Shall provide a valid graph object in constructor.");
         finder = new WordTree();
         _graph = G; // Not the best way to handle this.
         reversed = G.reverse();
+        if (_graph == null) throw new IllegalArgumentException("Shall provide a valid graph object in constructor.");
     }
 
     // length of shortest ancestral path between v and w; -1 if no such path
@@ -42,7 +43,7 @@ public class SAP {
     public static void main(String[] args) {
     }
 
-    class searcher {
+    static class searcher {
 
         int _v;
         boolean[] marked;
@@ -95,7 +96,7 @@ public class SAP {
         }
     }
 
-    interface IFinder {
+    static interface IFinder {
         public int ancestor(int v, int w);
         public int length(int v, int w);
         public int ancestor(Iterable<Integer> v, Iterable<Integer> w);
@@ -103,7 +104,7 @@ public class SAP {
     }
 
     // Generates a common ancestor from to fields.
-    class LCA implements Comparable<LCA> {
+    static class LCA implements Comparable<LCA> {
         int length;
         int v;
         int w;
@@ -118,7 +119,7 @@ public class SAP {
     }
 
     // I want this pulse and find using DFS and BFS like slime mold.
-    class WordTree implements IFinder {
+    static class WordTree implements IFinder {
         MinPQ<LCA> shortest; 
         ST<Integer, searcher> mem;
         int iamroot;
